@@ -7,7 +7,10 @@
 #include "Background.h"
 #include "HUD.h"
 
-bool exitGame = false, gameOn = false;
+Player player;
+
+
+bool exitGame = false, gameOn = true;
 
 
 void main()
@@ -16,7 +19,7 @@ void main()
 	sfw::initContext(900, 900, "Spectra Shift");
 	sfw::setBackgroundColor(BLACK);
 
-	void LoadAllTextures();
+	LoadAllTextures();
 
 	while (!exitGame)
 	{
@@ -25,6 +28,13 @@ void main()
 			while (sfw::stepContext())
 			{
 				DrawBackground();
+
+				player.SetPlayerAngles();
+				player.Movement();
+
+				sfw::drawTexture(GetTexture("playerShip"), player.position.x, player.position.y, 54, 60, player.targetAngle, true, 0);
+				sfw::drawTexture(GetTexture("target"), sfw::getMouseX(), sfw::getMouseY(), 20, 20, player.targetAngle, true, 0);
+				
 				
 				// ***** Print player and mouse positions to console *****
 				//std::cout << "{ " << player.position.x << ", " << player.position.y << " }" << std::endl;
@@ -50,13 +60,13 @@ void main()
 				if (sfw::getKey(72))
 					DrawMeters(-5, 0, 0);
 				if (sfw::getKey(85))
-					DrawMeters(0, 5, 0);
+					DrawMeters(0, 2, 0);
 				if (sfw::getKey(74))
-					DrawMeters(0, -5, 0);
+					DrawMeters(0, -2, 0);
 				if (sfw::getKey(73))
-					DrawMeters(0, 0, 5);
+					DrawMeters(0, 0, 2);
 				if (sfw::getKey(75))
-					DrawMeters(0, 0, -5);
+					DrawMeters(0, 0, -2);
 
 			}
 

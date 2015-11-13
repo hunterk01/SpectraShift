@@ -1,14 +1,32 @@
 #include "sfwdraw.h"
 #include "Player.h"
-#include "GameObjects.h"
 #include "AssetLibrary.h"
+#include "Background.h"
 #include <math.h>
 
-Player player;
-
 bool compassPointControls = true;
+float deltaTime = sfw::getDeltaTime();
 
-void Player::Movement(vec2 & lightSkyPos, vec2 & darkSkyPos, vec2 & starfieldPos)
+// Make player ship always point toward mouse position
+void Player::SetPlayerAngles()
+{
+	// Get difference in player and mouse positions
+	float dx = sfw::getMouseX() - position.x;
+	float dy = sfw::getMouseY() - position.y;
+
+	// Calculate rotation angle in degrees
+	targetAngle = atan2f(dy, dx);
+	targetAngle = targetAngle * (180 / PI);
+
+	// Calculate perpendicular angle
+	perpAngle = -targetAngle * (180 / PI);
+
+	//std::cout << "Target: " << targetAngle << std::endl << "Perp: " << perpAngle << std::endl << std::endl;
+
+}
+
+// Handle player movement with WASD keys
+void Player::Movement()
 {
 	if (compassPointControls)
 	{

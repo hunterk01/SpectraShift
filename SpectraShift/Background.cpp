@@ -3,9 +3,9 @@
 #include "GameObjects.h"
 #include "Background.h"
 
-vec2 lightSkyPos = { 450,450 };
-vec2 darkSkyPos = { 450,450 };
-vec2 starfieldPos = { 450,450 };
+extern vec2 lightSkyPos = { 450,450 };
+extern vec2 darkSkyPos = { 450,450 };
+extern vec2 starfieldPos = { 450,450 };
 
 bool currentState, lastState;
 
@@ -28,7 +28,7 @@ void DrawBackground()
 	else
 	{
 		sfw::drawTexture(GetTexture("BG_stars"), starfieldPos.x, starfieldPos.y, 1800, 1800, 90, true, 0, 0xffffffff);
-		sfw::drawTexture(GetTexture("BG_dark"), lightSkyPos.x, lightSkyPos.y, 1800, 1800, 90, true, 0, 0xffff0080);
+		sfw::drawTexture(GetTexture("BG_light"), lightSkyPos.x, lightSkyPos.y, 1800, 1800, 90, true, 0, 0xffff0080);
 
 		if (currentState && !lastState)
 		{

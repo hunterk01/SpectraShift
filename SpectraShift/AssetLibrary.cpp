@@ -67,27 +67,28 @@ unsigned sampleAnimation(const std::string &tname, const std::string &aname, flo
 void LoadAllTextures()
 {
 	// Background Textures
-	LoadTexture("BG_stars", "./Sprites/BG/starfield.png", 1, 1);
-	LoadTexture("BG_light", "./Sprites/BG/blue_ring_nebula.png", 1, 1);
-	LoadTexture("BG_dark", "./Sprites/BG/sky_dark.png", 1, 1);
+	LoadTexture("BG_stars", "./Assets/BG/starfield.png", 1, 1);
+	LoadTexture("BG_light", "./Assets/BG/skyLight.png", 1, 1);
+	LoadTexture("BG_dark", "./Assets/BG/skyDark.png", 1, 1);
 	
 	// HUD Textures
-	LoadTexture("valueMeter", "./Sprites/HUD/valueMeter.png", 1, 1);
-	LoadTexture("healthPtr", "./Sprites/HUD/pointer.png", 1, 1);
-	LoadTexture("lightPtr", "./Sprites/HUD/pointer.png", 1, 1);
-	LoadTexture("darkPtr", "./Sprites/HUD/pointer.png", 1, 1);
-	LoadTexture("hudTopRight", "./Sprites/HUD/hudTopRight.png", 1, 1);
-	LoadTexture("hudBottom", "./Sprites/HUD/gameHUD.png", 1, 1);
-	LoadTexture("scoreFont", "./Sprites/Text/scoreFont.png", 16, 16);
+	LoadTexture("valueMeter", "./Assets/HUD/valueMeter.png", 1, 1);
+	LoadTexture("healthPtr", "./Assets/HUD/pointer.png", 1, 1);
+	LoadTexture("lightPtr", "./Assets/HUD/pointer.png", 1, 1);
+	LoadTexture("darkPtr", "./Assets/HUD/pointer.png", 1, 1);
+	LoadTexture("hudTopRight", "./Assets/HUD/hudTopRight.png", 1, 1);
+	LoadTexture("hudBottom", "./Assets/HUD/hudBottom.png", 1, 1);
+	LoadTexture("scoreFont", "./Assets/Fonts/scoreFont.png", 16, 16);
 
 	// Ship Textures
-	LoadTexture("playerShip", "./Sprites/Ships/redFighter.png", 1, 1);
+	LoadTexture("playerShip", "./Assets/Ships/redFighter.png", 1, 1);
+	LoadTexture("target", "./Assets/Objects/target.png", 1, 1);
 
 	// Asteroid Textures
-	LoadTexture("asteroid1", "./Sprites/Objects/asteroid1.png", 5, 4);
-	LoadTexture("asteroid2", "./Sprites/Objects/asteroid2.png", 5, 4);
-	LoadTexture("asteroid3", "./Sprites/Objects/asteroid3.png", 5, 4);
-	LoadTexture("asteroid4", "./Sprites/Objects/asteroid4.png", 5, 4);
+	LoadTexture("asteroid1", "./Assets/Objects/asteroid1.png", 5, 4);
+	LoadTexture("asteroid2", "./Assets/Objects/asteroid2.png", 5, 4);
+	LoadTexture("asteroid3", "./Assets/Objects/asteroid3.png", 5, 4);
+	LoadTexture("asteroid4", "./Assets/Objects/asteroid4.png", 5, 4);
 
 	// SFX Textures
 
