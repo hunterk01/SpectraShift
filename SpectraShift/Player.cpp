@@ -3,9 +3,9 @@
 #include "AssetLibrary.h"
 #include "Background.h"
 #include <math.h>
+#include <iostream>
 
-bool compassPointControls = true;
-float deltaTime = sfw::getDeltaTime();
+bool compassPointControls = false;
 
 // Make player ship always point toward mouse position
 void Player::SetPlayerAngles()
@@ -19,21 +19,46 @@ void Player::SetPlayerAngles()
 	targetAngle = targetAngle * (180 / PI);
 
 	// Calculate perpendicular angle
-	perpAngle = -targetAngle * (180 / PI);
+	if (-90 > targetAngle && targetAngle > -180)
+		perpAngle = targetAngle + 270;
+	else
+		perpAngle = targetAngle - 90;
 
-	//std::cout << "Target: " << targetAngle << std::endl << "Perp: " << perpAngle << std::endl << std::endl;
+	if (perpAngle < -180)
+		perpAngle = -(perpAngle + 180);
 
+	//std::cout << "Target: " << targetAngle << "  Perp: " << perpAngle << std::endl << std::endl;
 }
 
 // Handle player movement with WASD keys
 void Player::Movement()
 {
+	float deltaTime = sfw::getDeltaTime();
+	float adjTargetAngle = 0.f, adjPerpAngle = 0.f;
+
+	// Adjust target angle for angles greater than 90 degrees
+	if (targetAngle > 90)
+		adjTargetAngle = 180 - targetAngle;
+	else if (targetAngle < -90)
+		adjTargetAngle = -180 - targetAngle;
+	else
+		adjTargetAngle = targetAngle;
+
+	// Adjust perp angle for angles greater than 90 degrees
+	if (perpAngle > 90)
+		adjPerpAngle = 180 - perpAngle;
+	else if (perpAngle < -90)
+		adjPerpAngle = -180 - perpAngle;
+	else
+		adjPerpAngle = perpAngle;
+
+	//std::cout << "adj Target: " << adjTargetAngle << "  adj Perp: " << adjPerpAngle << std::endl << std::endl;
+
+	// Movement is always in up, down, left, right directions
 	if (compassPointControls)
 	{
 		if (sfw::getKey(87) || sfw::getKey(83) || sfw::getKey(65) || sfw::getKey(68))
 		{
-			float deltaTime = sfw::getDeltaTime();
-
 			if (sfw::getKey(87)) // W
 			{
 				if (position.y < 850)
@@ -97,18 +122,24 @@ void Player::Movement()
 			velocity.y = 0;
 		}
 	}
+
+	// Movement is relative to the direction the player ship is facing
 	else
 	{
+		float speedMod = 20;
+		determineQuadrant();
+		
 		if (sfw::getKey(87) || sfw::getKey(83) || sfw::getKey(65) || sfw::getKey(68))
 		{
-			float deltaTime = sfw::getDeltaTime();
-
 			if (sfw::getKey(87)) // W
 			{
 				if (position.y < 850)
 				{
-					position.x += speed * sin(targetAngle) * deltaTime;
-					position.y += speed * cos(targetAngle) * deltaTime;
+					velocity.x = abs(cos((adjTargetAngle * PI) / 180));
+					velocity.y = abs(sin((adjTargetAngle * PI) / 180));
+					
+					applyVelocity(forwardQuadrant);
+
 					lightSkyPos.y = lightSkyPos.y - (speed / 2.5) * deltaTime;
 					darkSkyPos.y = darkSkyPos.y - (speed / 2.5) * deltaTime;
 					starfieldPos.y = starfieldPos.y - (speed / 3) * deltaTime;
@@ -122,8 +153,11 @@ void Player::Movement()
 			{
 				if (position.x > 50)
 				{
-					position.x -= speed * sin(perpAngle) * deltaTime;
-					position.y -= speed * cos(perpAngle) * deltaTime;
+					velocity.x = abs(cos((adjPerpAngle * PI) / 180));
+					velocity.y = abs(sin((adjPerpAngle * PI) / 180));
+					
+					applyVelocity(leftQuadrant);
+
 					lightSkyPos.x = lightSkyPos.x + (speed / 2.5) * deltaTime;
 					darkSkyPos.x = darkSkyPos.x + (speed / 2.5) * deltaTime;
 					starfieldPos.x = starfieldPos.x + (speed / 3) * deltaTime;
@@ -137,8 +171,11 @@ void Player::Movement()
 			{
 				if (position.y > 50)
 				{
-					position.x -= speed * sin(targetAngle) * deltaTime;
-					position.y -= speed * cos(targetAngle) * deltaTime;
+					velocity.x = abs(cos((adjTargetAngle * PI) / 180));
+					velocity.y = abs(sin((adjTargetAngle * PI) / 180));
+
+					applyVelocity(reverseQuadrant);
+
 					lightSkyPos.y = lightSkyPos.y + (speed / 2.5) * deltaTime;
 					darkSkyPos.y = darkSkyPos.y + (speed / 2.5) * deltaTime;
 					starfieldPos.y = starfieldPos.y + (speed / 3) * deltaTime;
@@ -152,8 +189,11 @@ void Player::Movement()
 			{
 				if (position.x < 850)
 				{
-					position.x += speed * cos(perpAngle) * deltaTime;
-					position.y += speed * sin(perpAngle) * deltaTime;
+					velocity.x = abs(cos((adjPerpAngle * PI) / 180));
+					velocity.y = abs(sin((adjPerpAngle * PI) / 180));
+
+					applyVelocity(rightQuadrant);
+
 					lightSkyPos.x = lightSkyPos.x - (speed / 2.5) * deltaTime;
 					darkSkyPos.x = darkSkyPos.x - (speed / 2.5) * deltaTime;
 					starfieldPos.x = starfieldPos.x - (speed / 3) * deltaTime;
@@ -170,10 +210,65 @@ void Player::Movement()
 			velocity.y = 0;
 		}
 	}
+
+	
+
+	std::cout << "velocity = { " << velocity.x << ", " << velocity.y << " }" << std::endl;
 }
 
+void Player::determineQuadrant()
+{
+	if (90 >= targetAngle && targetAngle >= 0)
+	{
+		forwardQuadrant = 1;
+		leftQuadrant = 2;
+		reverseQuadrant = 3;
+		rightQuadrant = 4;
+	}
+	if (180 >= targetAngle && targetAngle > 90)
+	{
+		forwardQuadrant = 2;
+		leftQuadrant = 3;
+		reverseQuadrant = 4;
+		rightQuadrant = 1;
+	}
+	if (-90 > targetAngle && targetAngle >= -180)
+	{
+		forwardQuadrant = 3;
+		leftQuadrant = 4;
+		reverseQuadrant = 1;
+		rightQuadrant = 2;
+	}
+	if (0 >= targetAngle && targetAngle >= -90)
+	{
+		forwardQuadrant = 4;
+		leftQuadrant = 1;
+		reverseQuadrant = 2;
+		rightQuadrant = 3;
+	}
+}
 
-
-// Reference for player movement and mouse targeting
-// sfw::drawTexture(playerShip, player.position.x, player.position.y, 54, 60, player.targetAngle, true, 0);
-// sfw::drawTexture(target, sfw::getMouseX(), sfw::getMouseY(), 20, 20, player.targetAngle, true, 0);
+void Player::applyVelocity(int inQuadrant)
+{
+	float deltaTime = sfw::getDeltaTime();
+	if (inQuadrant == 1)
+	{
+		position.x += velocity.x * speed * deltaTime;
+		position.y += velocity.y * speed * deltaTime;
+	}
+	else if (inQuadrant == 2)
+	{
+		position.x -= velocity.x * speed * deltaTime;
+		position.y += velocity.y * speed * deltaTime;
+	}
+	else if (inQuadrant == 3)
+	{
+		position.x -= velocity.x * speed * deltaTime;
+		position.y -= velocity.y * speed * deltaTime;
+	}
+	else if (inQuadrant == 4)
+	{
+		position.x += velocity.x * speed * deltaTime;
+		position.y -= velocity.y * speed * deltaTime;
+	}
+}
