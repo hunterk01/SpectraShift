@@ -24,7 +24,7 @@ void GameObject::onCollision(GameObject &go, float distance)
 	
 }
 
-/*
+
 float doCollision(GameObject &go1, GameObject &go2)
 {
 	float distance = iTest_Circle(go1.position.x, go1.position.y, go1.radius, go2.position.x, go2.position.y, go2.radius);
@@ -37,4 +37,3 @@ float doCollision(GameObject &go1, GameObject &go2)
 
 	return distance;
 }
-*/

@@ -1,5 +1,6 @@
 #include "sfwdraw.h"
 #include "Player.h"
+#include "GameState.h"
 #include "AssetLibrary.h"
 #include "Background.h"
 #include <math.h>
@@ -27,6 +28,7 @@ void Player::SetPlayerAngles()
 	if (perpAngle < -180)
 		perpAngle = -(perpAngle + 180);
 
+	// **************** Target and perp angle output to console for debugging ***********
 	//std::cout << "Target: " << targetAngle << "  Perp: " << perpAngle << std::endl << std::endl;
 }
 
@@ -52,6 +54,7 @@ void Player::Movement()
 	else
 		adjPerpAngle = perpAngle;
 
+	// ****************  Adjusted angle output to console for debugging **************
 	//std::cout << "adj Target: " << adjTargetAngle << "  adj Perp: " << adjPerpAngle << std::endl << std::endl;
 
 	// Movement is always in up, down, left, right directions
@@ -118,8 +121,8 @@ void Player::Movement()
 		}
 		else
 		{
-			velocity.x = 0;
-			velocity.y = 0;
+			trajectory.x = 0;
+			trajectory.y = 0;
 		}
 	}
 
@@ -135,14 +138,10 @@ void Player::Movement()
 			{
 				if (position.y < 850)
 				{
-					velocity.x = abs(cos((adjTargetAngle * PI) / 180));
-					velocity.y = abs(sin((adjTargetAngle * PI) / 180));
+					trajectory.x = abs(cos((adjTargetAngle * PI) / 180));
+					trajectory.y = abs(sin((adjTargetAngle * PI) / 180));
 					
 					applyVelocity(forwardQuadrant);
-
-					lightSkyPos.y = lightSkyPos.y - (speed / 2.5) * deltaTime;
-					darkSkyPos.y = darkSkyPos.y - (speed / 2.5) * deltaTime;
-					starfieldPos.y = starfieldPos.y - (speed / 3) * deltaTime;
 				}
 				else
 				{
@@ -153,14 +152,10 @@ void Player::Movement()
 			{
 				if (position.x > 50)
 				{
-					velocity.x = abs(cos((adjPerpAngle * PI) / 180));
-					velocity.y = abs(sin((adjPerpAngle * PI) / 180));
+					trajectory.x = abs(cos((adjPerpAngle * PI) / 180));
+					trajectory.y = abs(sin((adjPerpAngle * PI) / 180));
 					
 					applyVelocity(leftQuadrant);
-
-					lightSkyPos.x = lightSkyPos.x + (speed / 2.5) * deltaTime;
-					darkSkyPos.x = darkSkyPos.x + (speed / 2.5) * deltaTime;
-					starfieldPos.x = starfieldPos.x + (speed / 3) * deltaTime;
 				}
 				else
 				{
@@ -171,14 +166,10 @@ void Player::Movement()
 			{
 				if (position.y > 50)
 				{
-					velocity.x = abs(cos((adjTargetAngle * PI) / 180));
-					velocity.y = abs(sin((adjTargetAngle * PI) / 180));
+					trajectory.x = abs(cos((adjTargetAngle * PI) / 180));
+					trajectory.y = abs(sin((adjTargetAngle * PI) / 180));
 
 					applyVelocity(reverseQuadrant);
-
-					lightSkyPos.y = lightSkyPos.y + (speed / 2.5) * deltaTime;
-					darkSkyPos.y = darkSkyPos.y + (speed / 2.5) * deltaTime;
-					starfieldPos.y = starfieldPos.y + (speed / 3) * deltaTime;
 				}
 				else
 				{
@@ -189,14 +180,10 @@ void Player::Movement()
 			{
 				if (position.x < 850)
 				{
-					velocity.x = abs(cos((adjPerpAngle * PI) / 180));
-					velocity.y = abs(sin((adjPerpAngle * PI) / 180));
+					trajectory.x = abs(cos((adjPerpAngle * PI) / 180));
+					trajectory.y = abs(sin((adjPerpAngle * PI) / 180));
 
 					applyVelocity(rightQuadrant);
-
-					lightSkyPos.x = lightSkyPos.x - (speed / 2.5) * deltaTime;
-					darkSkyPos.x = darkSkyPos.x - (speed / 2.5) * deltaTime;
-					starfieldPos.x = starfieldPos.x - (speed / 3) * deltaTime;
 				}
 				else
 				{
@@ -206,14 +193,25 @@ void Player::Movement()
 		}
 		else
 		{
-			velocity.x = 0;
-			velocity.y = 0;
+			trajectory.x = 0;
+			trajectory.y = 0;
 		}
 	}
 
 	
+	// ************  Trajectory output to console for debugging **************
+	//std::cout << "Trajectory = { " << trajectory.x << ", " << trajectory.y << " }" << std::endl;
 
-	std::cout << "velocity = { " << velocity.x << ", " << velocity.y << " }" << std::endl;
+	// Control for firing projectiles
+	fireDelay -= sfw::getDeltaTime();
+	
+	if (sfw::getMouseButton(MOUSE_BUTTON_LEFT) && fireDelay < 0)
+	{
+		fireDelay = rateOfFire;
+		gs()->makeBullet(position.x, position.y, sfw::getMouseX(), sfw::getMouseY(), 2.f);
+	}
+
+
 }
 
 void Player::determineQuadrant()
@@ -253,22 +251,114 @@ void Player::applyVelocity(int inQuadrant)
 	float deltaTime = sfw::getDeltaTime();
 	if (inQuadrant == 1)
 	{
-		position.x += velocity.x * speed * deltaTime;
-		position.y += velocity.y * speed * deltaTime;
+		if (position.x < 850)
+		{
+			position.x += trajectory.x * speed * deltaTime;
+
+			lightSkyPos.x -= trajectory.x * (speed / 2.5) * deltaTime;
+			darkSkyPos.x -= trajectory.x * (speed / 2.5) * deltaTime;
+			starfieldPos.x -= trajectory.x * (speed / 3) * deltaTime;
+		}
+		else
+		{
+			position.x = 850;
+		}
+		
+		if (position.y < 850)
+		{
+			position.y += trajectory.y * speed * deltaTime;
+
+			lightSkyPos.y -= trajectory.y * (speed / 2.5) * deltaTime;
+			darkSkyPos.y -= trajectory.y * (speed / 2.5) * deltaTime;
+			starfieldPos.y -= trajectory.y * (speed / 3) * deltaTime;
+		}
+		else
+		{
+			position.y = 850;
+		}
 	}
 	else if (inQuadrant == 2)
 	{
-		position.x -= velocity.x * speed * deltaTime;
-		position.y += velocity.y * speed * deltaTime;
+		if (position.x > 50)
+		{
+			position.x -= trajectory.x * speed * deltaTime;
+
+			lightSkyPos.x += trajectory.x * (speed / 2.5) * deltaTime;
+			darkSkyPos.x += trajectory.x * (speed / 2.5) * deltaTime;
+			starfieldPos.x += trajectory.x * (speed / 3) * deltaTime;
+		}
+		else
+		{
+			position.x = 50;
+		}
+	
+		if (position.y < 850)
+		{
+			position.y += trajectory.y * speed * deltaTime;
+
+			lightSkyPos.y -= trajectory.y * (speed / 2.5) * deltaTime;
+			darkSkyPos.y -= trajectory.y * (speed / 2.5) * deltaTime;
+			starfieldPos.y -= trajectory.y * (speed / 3) * deltaTime;
+		}
+		else
+		{
+			position.y = 850;
+		}
 	}
 	else if (inQuadrant == 3)
 	{
-		position.x -= velocity.x * speed * deltaTime;
-		position.y -= velocity.y * speed * deltaTime;
+		if (position.x > 50)
+		{
+			position.x -= trajectory.x * speed * deltaTime;
+
+			lightSkyPos.x += trajectory.x * (speed / 2.5) * deltaTime;
+			darkSkyPos.x += trajectory.x * (speed / 2.5) * deltaTime;
+			starfieldPos.x += trajectory.x * (speed / 3) * deltaTime;
+		}
+		else
+		{
+			position.x = 50;
+		}
+
+		if (position.y > 50)
+		{
+			position.y -= trajectory.y * speed * deltaTime;
+
+			lightSkyPos.y += trajectory.y * (speed / 2.5) * deltaTime;
+			darkSkyPos.y += trajectory.y * (speed / 2.5) * deltaTime;
+			starfieldPos.y += trajectory.y * (speed / 3) * deltaTime;
+		}
+		else
+		{
+			position.y = 50;
+		}
 	}
 	else if (inQuadrant == 4)
 	{
-		position.x += velocity.x * speed * deltaTime;
-		position.y -= velocity.y * speed * deltaTime;
+		if (position.x < 850)
+		{
+			position.x += trajectory.x * speed * deltaTime;
+
+			lightSkyPos.x -= trajectory.x * (speed / 2.5) * deltaTime;
+			darkSkyPos.x -= trajectory.x * (speed / 2.5) * deltaTime;
+			starfieldPos.x -= trajectory.x * (speed / 3) * deltaTime;
+		}
+		else
+		{
+			position.x = 850;
+		}
+
+		if (position.y > 50)
+		{
+			position.y -= trajectory.y * speed * deltaTime;
+
+			lightSkyPos.y += trajectory.y * (speed / 2.5) * deltaTime;
+			darkSkyPos.y += trajectory.y * (speed / 2.5) * deltaTime;
+			starfieldPos.y += trajectory.y * (speed / 3) * deltaTime;
+		}
+		else
+		{
+			position.y = 50;
+		}
 	}
 }

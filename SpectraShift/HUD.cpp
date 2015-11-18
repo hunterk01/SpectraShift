@@ -94,7 +94,6 @@ void CalculateScore(int inScore)
 
 void DrawScore()
 {
-	// Draw Score
 	sfw::drawTexture(GetTexture("scoreFont"), 50, 48, 32, 32, 0, true, scoreValues[0] + 48, 0x00ff0060);
 	sfw::drawTexture(GetTexture("scoreFont"), 75, 48, 32, 32, 0, true, scoreValues[1] + 48, 0x00ff0060);
 	sfw::drawTexture(GetTexture("scoreFont"), 100, 48, 32, 32, 0, true, scoreValues[2] + 48, 0x00ff0060);

@@ -1,14 +1,12 @@
 #include <iostream>
 #include "sfwdraw.h"
 #include "AssetLibrary.h"
+#include "GameState.h"
 #include "GameObjects.h"
 #include "Menu.h"
 #include "Player.h"
 #include "Background.h"
 #include "HUD.h"
-
-Player player;
-
 
 bool exitGame = false, gameOn = true;
 
@@ -19,24 +17,25 @@ void main()
 	sfw::initContext(900, 900, "Spectra Shift");
 	sfw::setBackgroundColor(BLACK);
 
+	GameState game;
+
 	LoadAllTextures();
 
 	while (!exitGame)
 	{
+		
+		
 		while(gameOn)
 		{
 			while (sfw::stepContext())
 			{
 				DrawBackground();
 
-				player.SetPlayerAngles();
-				player.Movement();
-
-				sfw::drawTexture(GetTexture("playerShip"), player.position.x, player.position.y, 54, 60, player.targetAngle, true, 0);
-				sfw::drawTexture(GetTexture("target"), sfw::getMouseX(), sfw::getMouseY(), 20, 20, player.targetAngle, true, 0);
+				game.update();
+				game.draw();
 				
 				
-				// ***** Print player and mouse positions to console *****
+				// ***** Print player and mouse positions to console for debugging *****
 				//std::cout << "{ " << player.position.x << ", " << player.position.y << " }" << std::endl;
 				//std::cout << "{ " << sfw::getMouseX() << ", " << sfw::getMouseY() << " }" << std::endl;
 

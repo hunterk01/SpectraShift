@@ -91,6 +91,6 @@ void LoadAllTextures()
 	LoadTexture("asteroid4", "./Assets/Objects/asteroid4.png", 5, 4);
 
 	// SFX Textures
-
+	LoadTexture("yellowBullet", "./Assets/SFX/yellowBullet.png", 1, 1);
 }
 
