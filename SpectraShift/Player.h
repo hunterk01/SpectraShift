@@ -15,7 +15,7 @@ public:
 	Player()
 	{
 		isAlive = true;
-		rateOfFire = 0.6f;
+		rateOfFire = .3f;
 	}
 
 	void SetPlayerAngles();
@@ -25,6 +25,5 @@ public:
 	void determineQuadrant();
 
 	void applyVelocity(int inQuadrant);
-
 };
 

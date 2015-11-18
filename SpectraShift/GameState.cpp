@@ -1,6 +1,7 @@
 #include "GameState.h"
 #include "Player.h"
 #include "Projectile.h"
+#include "Asteroid.h"
 #include <vector>
 
 void GameState::makeBullet(float x, float y, float dx, float dy, float lifespan)
@@ -17,6 +18,20 @@ void GameState::makeBullet(float x, float y, float dx, float dy, float lifespan)
 	bullets.push_back(Projectile(x, y, dx, dy, lifespan));
 }
 
+void GameState::makeAsteroids(float x, float y, float dx, float dy, float lifespan)
+{
+	for (int i = 0; i < asteroids.size(); ++i)
+	{
+		if (!asteroids[i].isAlive) // Find an empty spot in our vector
+		{
+			asteroids[i] = Asteroid(x, y, dx, dy, lifespan);
+			return;
+		}
+	}
+	// if there is no empty spot, generate a new bullet into the vector
+	asteroids.push_back(Asteroid(x, y, dx, dy, lifespan));
+}
+
 void GameState::makeExplosion()
 {
 
@@ -26,12 +41,6 @@ void GameState::makeEnemy()
 {
 
 }
-
-void GameState::makeAsteroid()
-{
-
-}
-
 
 
 GameState::GameState()
@@ -50,7 +59,7 @@ void GameState::update()
 		player.Movement();
 	}
 
-	// example useful for determining when to spawn a new wave of enemies.
+	// Bullet spawn control
 	int nBulletsActive = 0;
 
 	for (int i = 0; i < bullets.size(); ++i)
@@ -64,9 +73,21 @@ void GameState::update()
 		else nBulletsActive++;
 	}
 	
-	if (nBulletsActive == 0)
+	// Asteroid spawn control
+	int nAsteroidsActive = 0;
+	
+	if (nAsteroidsActive == 0)
 	{
-		// Spawn a new wave of enemies (obviously not using Bullets >__>)
+		for (int i = 0; i < asteroids.size(); ++i)
+		{
+			if (asteroids[i].isAlive)
+			{
+				asteroids[i].update();
+				if (player.isAlive)
+					doCollision(player, asteroids[i]);
+			}
+			else nAsteroidsActive++;
+		}
 	}
 
 	// Collision detection between two objects of the same type
@@ -89,6 +110,12 @@ void GameState::draw()
 	{
 		if (bullets[i].isAlive)
 			bullets[i].draw();
+	}
+
+	for (int i = 0; i < asteroids.size(); ++i)
+	{
+		if (asteroids[i].isAlive)
+			asteroids[i].draw();
 	}
 }
 

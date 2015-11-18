@@ -122,6 +122,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetLibrary.cpp" />
+    <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="Background.cpp" />
     <ClCompile Include="CollisionTest.cpp" />
     <ClCompile Include="GameObjects.cpp" />
@@ -134,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetLibrary.h" />
+    <ClInclude Include="Asteroid.h" />
     <ClInclude Include="Background.h" />
     <ClInclude Include="CollisionTest.h" />
     <ClInclude Include="GameObjects.h" />

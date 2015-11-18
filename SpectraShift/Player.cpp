@@ -37,6 +37,7 @@ void Player::Movement()
 {
 	float deltaTime = sfw::getDeltaTime();
 	float adjTargetAngle = 0.f, adjPerpAngle = 0.f;
+	float bulletTrajectoryX, bulletTrajectoryY;
 
 	// Adjust target angle for angles greater than 90 degrees
 	if (targetAngle > 90)
@@ -138,10 +139,16 @@ void Player::Movement()
 			{
 				if (position.y < 850)
 				{
-					trajectory.x = abs(cos((adjTargetAngle * PI) / 180));
-					trajectory.y = abs(sin((adjTargetAngle * PI) / 180));
-					
-					applyVelocity(forwardQuadrant);
+					float targetDistance = sqrtf((position.x - sfw::getMouseX()) * (position.x - sfw::getMouseX())
+						+ (position.y - sfw::getMouseY()) * (position.y - sfw::getMouseY()));
+
+					if (targetDistance > 75)
+					{
+						trajectory.x = abs(cos((adjTargetAngle * PI) / 180));
+						trajectory.y = abs(sin((adjTargetAngle * PI) / 180));
+
+						applyVelocity(forwardQuadrant);
+					}
 				}
 				else
 				{
@@ -207,11 +214,21 @@ void Player::Movement()
 	
 	if (sfw::getMouseButton(MOUSE_BUTTON_LEFT) && fireDelay < 0)
 	{
+		float mouseX, mouseY;
 		fireDelay = rateOfFire;
-		gs()->makeBullet(position.x, position.y, sfw::getMouseX(), sfw::getMouseY(), 2.f);
+
+		bulletTrajectoryX = abs(cos((adjTargetAngle * PI) / 180));
+		bulletTrajectoryY = abs(sin((adjTargetAngle * PI) / 180));
+
+		if(forwardQuadrant == 1)
+			gs()->makeBullet(position.x, position.y, bulletTrajectoryX, bulletTrajectoryY, 2.f);
+		else if (forwardQuadrant == 2)
+			gs()->makeBullet(position.x, position.y, -bulletTrajectoryX, bulletTrajectoryY, 2.f);
+		else if (forwardQuadrant == 3)
+			gs()->makeBullet(position.x, position.y, -bulletTrajectoryX, -bulletTrajectoryY, 2.f);
+		else if (forwardQuadrant == 4)
+			gs()->makeBullet(position.x, position.y, bulletTrajectoryX, -bulletTrajectoryY, 2.f);
 	}
-
-
 }
 
 void Player::determineQuadrant()

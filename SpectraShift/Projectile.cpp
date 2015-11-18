@@ -5,7 +5,7 @@
 
 Projectile::Projectile(float a_x, float a_y, float dx, float dy, float lifespan)
 {
-	speed = .5;
+	speed = 500;
 	
 	position.x = a_x;
 	position.y = a_y;
@@ -23,11 +23,9 @@ void Projectile::onCollision(GameObject & go, float distance)
 
 void Projectile::update()
 {
-	//GameObject::Update(); // go ahead and update the base gameObject class
 	lifetime -= sfw::getDeltaTime();
-	isAlive = lifetime > 0; // the bullet is no longer active when the lifetime reduces to 0
+	isAlive = lifetime > 0;
 
-							 // Euler Integration to move our bullet
 	position.x += trajectory.x * speed * sfw::getDeltaTime();
 	position.y += trajectory.y * speed * sfw::getDeltaTime();
 }

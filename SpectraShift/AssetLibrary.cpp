@@ -90,6 +90,12 @@ void LoadAllTextures()
 	LoadTexture("asteroid3", "./Assets/Objects/asteroid3.png", 5, 4);
 	LoadTexture("asteroid4", "./Assets/Objects/asteroid4.png", 5, 4);
 
+	// Asteroid Animations
+	addAnimation("asteroid1", "rotation", { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18 });
+	addAnimation("asteroid2", "rotation", { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18 });
+	addAnimation("asteroid3", "rotation", { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18 });
+	addAnimation("asteroid4", "rotation", { 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18 });
+
 	// SFX Textures
 	LoadTexture("yellowBullet", "./Assets/SFX/yellowBullet.png", 1, 1);
 }
