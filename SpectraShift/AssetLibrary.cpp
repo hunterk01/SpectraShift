@@ -70,6 +70,8 @@ void LoadAllTextures()
 	LoadTexture("BG_stars", "./Assets/BG/starfield.png", 1, 1);
 	LoadTexture("BG_light", "./Assets/BG/skyLight.png", 1, 1);
 	LoadTexture("BG_dark", "./Assets/BG/skyDark.png", 1, 1);
+	LoadTexture("TitleBG1", "./Assets/BG/TitleBG_Nebula1.png", 1, 1);
+	LoadTexture("TitleBG2", "./Assets/BG/TitleBG_Nebula2.png", 1, 1);
 	
 	// HUD Textures
 	LoadTexture("valueMeter", "./Assets/HUD/valueMeter.png", 1, 1);
@@ -81,7 +83,7 @@ void LoadAllTextures()
 	LoadTexture("scoreFont", "./Assets/Fonts/scoreFont.png", 16, 16);
 
 	// Ship Textures
-	LoadTexture("playerShip", "./Assets/Ships/redFighter.png", 1, 1);
+	LoadTexture("playerShip", "./Assets/Ships/playerShip.png", 1, 1);
 	LoadTexture("target", "./Assets/Objects/target.png", 1, 1);
 
 	// Asteroid Textures
@@ -98,5 +100,23 @@ void LoadAllTextures()
 
 	// SFX Textures
 	LoadTexture("yellowBullet", "./Assets/SFX/yellowBullet.png", 1, 1);
+
+	// Text Objects
+	LoadTexture("title", "./Assets/Fonts/SpectraShiftTitle.png", 1, 1);
+	LoadTexture("controls", "./Assets/Fonts/textControls.png", 1, 1);
+	LoadTexture("credits", "./Assets/Fonts/textCredits.png", 1, 1);
+	LoadTexture("instructions", "./Assets/Fonts/textInstructions.png", 1, 1);
+	LoadTexture("quit", "./Assets/Fonts/textQuit.png", 1, 1);
+	LoadTexture("start", "./Assets/Fonts/textStart.png", 1, 1);
+	LoadTexture("thanks", "./Assets/Fonts/textThanks.png", 1, 1);
+	LoadTexture("Xmark", "./Assets/Fonts/textX.png", 1, 1);
+	LoadTexture("forward", "./Assets/Fonts/textForward.png", 1, 1);
+	LoadTexture("compass", "./Assets/Fonts/textCompass.png", 1, 1);
+	LoadTexture("back", "./Assets/Fonts/textBack.png", 1, 1);
+	LoadTexture("targetText", "./Assets/Text/targetText.png", 1, 1);
+	LoadTexture("forwardText", "./Assets/Text/forwardText.png", 1, 1);
+	LoadTexture("compassText", "./Assets/Text/compassText.png", 1, 1);
+	LoadTexture("creditsText", "./Assets/Text/creditsText.png", 1, 1);
+	
 }
 

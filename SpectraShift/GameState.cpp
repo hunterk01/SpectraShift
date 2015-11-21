@@ -102,7 +102,7 @@ void GameState::draw()
 {
 	if (player.isAlive)
 	{
-		sfw::drawTexture(GetTexture("playerShip"), player.position.x, player.position.y, 54, 60, player.targetAngle, true, 0);
+		sfw::drawTexture(GetTexture("playerShip"), player.position.x, player.position.y, 50, 45, player.targetAngle, true, 0);
 		sfw::drawTexture(GetTexture("target"), sfw::getMouseX(), sfw::getMouseY(), 20, 20, player.targetAngle, true, 0);
 	}
 

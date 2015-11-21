@@ -272,8 +272,8 @@ void Player::applyVelocity(int inQuadrant)
 		{
 			position.x += trajectory.x * speed * deltaTime;
 
-			lightSkyPos.x -= trajectory.x * (speed / 2.5) * deltaTime;
-			darkSkyPos.x -= trajectory.x * (speed / 2.5) * deltaTime;
+			lightSkyPos.x -= trajectory.x * (speed / 2) * deltaTime;
+			darkSkyPos.x -= trajectory.x * (speed / 2) * deltaTime;
 			starfieldPos.x -= trajectory.x * (speed / 3) * deltaTime;
 		}
 		else
@@ -285,8 +285,8 @@ void Player::applyVelocity(int inQuadrant)
 		{
 			position.y += trajectory.y * speed * deltaTime;
 
-			lightSkyPos.y -= trajectory.y * (speed / 2.5) * deltaTime;
-			darkSkyPos.y -= trajectory.y * (speed / 2.5) * deltaTime;
+			lightSkyPos.y -= trajectory.y * (speed / 2) * deltaTime;
+			darkSkyPos.y -= trajectory.y * (speed / 2) * deltaTime;
 			starfieldPos.y -= trajectory.y * (speed / 3) * deltaTime;
 		}
 		else
@@ -300,8 +300,8 @@ void Player::applyVelocity(int inQuadrant)
 		{
 			position.x -= trajectory.x * speed * deltaTime;
 
-			lightSkyPos.x += trajectory.x * (speed / 2.5) * deltaTime;
-			darkSkyPos.x += trajectory.x * (speed / 2.5) * deltaTime;
+			lightSkyPos.x += trajectory.x * (speed / 2) * deltaTime;
+			darkSkyPos.x += trajectory.x * (speed / 2) * deltaTime;
 			starfieldPos.x += trajectory.x * (speed / 3) * deltaTime;
 		}
 		else
@@ -313,8 +313,8 @@ void Player::applyVelocity(int inQuadrant)
 		{
 			position.y += trajectory.y * speed * deltaTime;
 
-			lightSkyPos.y -= trajectory.y * (speed / 2.5) * deltaTime;
-			darkSkyPos.y -= trajectory.y * (speed / 2.5) * deltaTime;
+			lightSkyPos.y -= trajectory.y * (speed / 2) * deltaTime;
+			darkSkyPos.y -= trajectory.y * (speed / 2) * deltaTime;
 			starfieldPos.y -= trajectory.y * (speed / 3) * deltaTime;
 		}
 		else
@@ -328,8 +328,8 @@ void Player::applyVelocity(int inQuadrant)
 		{
 			position.x -= trajectory.x * speed * deltaTime;
 
-			lightSkyPos.x += trajectory.x * (speed / 2.5) * deltaTime;
-			darkSkyPos.x += trajectory.x * (speed / 2.5) * deltaTime;
+			lightSkyPos.x += trajectory.x * (speed / 2) * deltaTime;
+			darkSkyPos.x += trajectory.x * (speed / 2) * deltaTime;
 			starfieldPos.x += trajectory.x * (speed / 3) * deltaTime;
 		}
 		else
@@ -341,8 +341,8 @@ void Player::applyVelocity(int inQuadrant)
 		{
 			position.y -= trajectory.y * speed * deltaTime;
 
-			lightSkyPos.y += trajectory.y * (speed / 2.5) * deltaTime;
-			darkSkyPos.y += trajectory.y * (speed / 2.5) * deltaTime;
+			lightSkyPos.y += trajectory.y * (speed / 2) * deltaTime;
+			darkSkyPos.y += trajectory.y * (speed / 2) * deltaTime;
 			starfieldPos.y += trajectory.y * (speed / 3) * deltaTime;
 		}
 		else
@@ -356,8 +356,8 @@ void Player::applyVelocity(int inQuadrant)
 		{
 			position.x += trajectory.x * speed * deltaTime;
 
-			lightSkyPos.x -= trajectory.x * (speed / 2.5) * deltaTime;
-			darkSkyPos.x -= trajectory.x * (speed / 2.5) * deltaTime;
+			lightSkyPos.x -= trajectory.x * (speed / 2) * deltaTime;
+			darkSkyPos.x -= trajectory.x * (speed / 2) * deltaTime;
 			starfieldPos.x -= trajectory.x * (speed / 3) * deltaTime;
 		}
 		else
@@ -369,8 +369,8 @@ void Player::applyVelocity(int inQuadrant)
 		{
 			position.y -= trajectory.y * speed * deltaTime;
 
-			lightSkyPos.y += trajectory.y * (speed / 2.5) * deltaTime;
-			darkSkyPos.y += trajectory.y * (speed / 2.5) * deltaTime;
+			lightSkyPos.y += trajectory.y * (speed / 2) * deltaTime;
+			darkSkyPos.y += trajectory.y * (speed / 2) * deltaTime;
 			starfieldPos.y += trajectory.y * (speed / 3) * deltaTime;
 		}
 		else

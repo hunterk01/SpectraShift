@@ -4,8 +4,10 @@ void DrawTitleScreen();
 
 void DrawMenu();
 
-void MenuHandler();
+void DrawInstructions();
 
-void ReinitializeGame();
+void DrawControls();
+
+void DrawCredits();
 
 void QuitGame();

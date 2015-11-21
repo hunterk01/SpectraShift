@@ -23,12 +23,16 @@ void main()
 
 	while (!exitGame)
 	{
-		
+
 		
 		while(gameOn)
 		{
 			while (sfw::stepContext())
 			{
+				
+				DrawTitleScreen();
+
+				/*
 				DrawBackground();
 
 				game.update();
@@ -66,7 +70,7 @@ void main()
 					DrawMeters(0, 0, 2);
 				if (sfw::getKey(75))
 					DrawMeters(0, 0, -2);
-
+*/
 			}
 
 		}
