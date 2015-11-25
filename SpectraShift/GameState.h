@@ -8,13 +8,15 @@
 class GameState
 {
 	Player player; 	// store all of our gameobjects
+	Asteroid asteroid;
 	std::vector<Projectile> bullets;
 	std::vector<Asteroid> asteroids;
 
+	
 public:
 	// Parameters may match the constructor for the bullet
 	void makeBullet(float x, float y, float dx, float dy, float lifespan);
-	void makeAsteroids(float x, float y, float dx, float dy, float lifespan);
+	void makeAsteroid();
 
 	void makeExplosion();
 	void makeEnemy();

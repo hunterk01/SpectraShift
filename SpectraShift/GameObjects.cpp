@@ -5,7 +5,7 @@
 
 void GameObject::SetAngles(GameObject &targetObject)
 {
-
+	
 }
 
 void GameObject::Draw()

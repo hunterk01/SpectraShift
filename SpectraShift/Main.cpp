@@ -7,13 +7,12 @@
 #include "Player.h"
 #include "Background.h"
 #include "HUD.h"
-
-bool exitGame = false, gameOn = true;
+#include <time.h>
 
 
 void main()
 {
-
+	srand(time(NULL));
 	sfw::initContext(900, 900, "Spectra Shift");
 	sfw::setBackgroundColor(BLACK);
 
@@ -21,28 +20,23 @@ void main()
 
 	LoadAllTextures();
 
-	while (!exitGame)
+	while (!CheckExitStatus())
 	{
-
-		
-		while(gameOn)
+		while (sfw::stepContext())
 		{
-			while (sfw::stepContext())
+			if (!CheckGameStatus())
 			{
-				
 				DrawTitleScreen();
-
-				/*
+			}
+			else
+			{
 				DrawBackground();
-
 				game.update();
 				game.draw();
-				
-				
+
 				// ***** Print player and mouse positions to console for debugging *****
 				//std::cout << "{ " << player.position.x << ", " << player.position.y << " }" << std::endl;
 				//std::cout << "{ " << sfw::getMouseX() << ", " << sfw::getMouseY() << " }" << std::endl;
-
 
 				// Draw HUD
 				DrawMeters(0, 0, 0);
@@ -70,10 +64,7 @@ void main()
 					DrawMeters(0, 0, 2);
 				if (sfw::getKey(75))
 					DrawMeters(0, 0, -2);
-*/
 			}
-
 		}
-
 	}
 }

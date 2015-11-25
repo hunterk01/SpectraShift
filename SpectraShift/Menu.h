@@ -11,3 +11,9 @@ void DrawControls();
 void DrawCredits();
 
 void QuitGame();
+
+bool CheckExitStatus();
+
+bool CheckGameStatus();
+
+bool checkControlType();

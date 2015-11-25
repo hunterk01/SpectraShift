@@ -3,10 +3,11 @@
 #include "GameState.h"
 #include "AssetLibrary.h"
 #include "Background.h"
+#include "Menu.h"
 #include <math.h>
 #include <iostream>
 
-bool compassPointControls = false;
+float asteroidDelay = .5f;
 
 // Make player ship always point toward mouse position
 void Player::SetPlayerAngles()
@@ -37,7 +38,8 @@ void Player::Movement()
 {
 	float deltaTime = sfw::getDeltaTime();
 	float adjTargetAngle = 0.f, adjPerpAngle = 0.f;
-	float bulletTrajectoryX, bulletTrajectoryY;
+
+	compassPointControls = checkControlType();
 
 	// Adjust target angle for angles greater than 90 degrees
 	if (targetAngle > 90)
@@ -61,6 +63,8 @@ void Player::Movement()
 	// Movement is always in up, down, left, right directions
 	if (compassPointControls)
 	{
+		determineQuadrant();
+		
 		if (sfw::getKey(87) || sfw::getKey(83) || sfw::getKey(65) || sfw::getKey(68))
 		{
 			if (sfw::getKey(87)) // W
@@ -204,30 +208,18 @@ void Player::Movement()
 			trajectory.y = 0;
 		}
 	}
-
 	
+	fireWeapon(adjTargetAngle);
+
 	// ************  Trajectory output to console for debugging **************
 	//std::cout << "Trajectory = { " << trajectory.x << ", " << trajectory.y << " }" << std::endl;
 
-	// Control for firing projectiles
-	fireDelay -= sfw::getDeltaTime();
-	
-	if (sfw::getMouseButton(MOUSE_BUTTON_LEFT) && fireDelay < 0)
+	asteroidDelay -= deltaTime;
+
+	if (asteroidDelay <= 0)
 	{
-		float mouseX, mouseY;
-		fireDelay = rateOfFire;
-
-		bulletTrajectoryX = abs(cos((adjTargetAngle * PI) / 180));
-		bulletTrajectoryY = abs(sin((adjTargetAngle * PI) / 180));
-
-		if(forwardQuadrant == 1)
-			gs()->makeBullet(position.x, position.y, bulletTrajectoryX, bulletTrajectoryY, 2.f);
-		else if (forwardQuadrant == 2)
-			gs()->makeBullet(position.x, position.y, -bulletTrajectoryX, bulletTrajectoryY, 2.f);
-		else if (forwardQuadrant == 3)
-			gs()->makeBullet(position.x, position.y, -bulletTrajectoryX, -bulletTrajectoryY, 2.f);
-		else if (forwardQuadrant == 4)
-			gs()->makeBullet(position.x, position.y, bulletTrajectoryX, -bulletTrajectoryY, 2.f);
+		gs()->makeAsteroid();
+		asteroidDelay = .5f;
 	}
 }
 
@@ -379,3 +371,48 @@ void Player::applyVelocity(int inQuadrant)
 		}
 	}
 }
+
+void Player::fireWeapon(float inAdjTargetAngle)
+{
+	float bulletTrajectoryX, bulletTrajectoryY;
+	
+	fireDelay -= sfw::getDeltaTime();
+
+	if (sfw::getMouseButton(MOUSE_BUTTON_LEFT) && fireDelay < 0)
+	{
+		float mouseX, mouseY;
+		fireDelay = rateOfFire;
+
+		bulletTrajectoryX = abs(cos((inAdjTargetAngle * PI) / 180));
+		bulletTrajectoryY = abs(sin((inAdjTargetAngle * PI) / 180));
+
+		if (forwardQuadrant == 1)
+			gs()->makeBullet(position.x, position.y, bulletTrajectoryX, bulletTrajectoryY, 2.f);
+		else if (forwardQuadrant == 2)
+			gs()->makeBullet(position.x, position.y, -bulletTrajectoryX, bulletTrajectoryY, 2.f);
+		else if (forwardQuadrant == 3)
+			gs()->makeBullet(position.x, position.y, -bulletTrajectoryX, -bulletTrajectoryY, 2.f);
+		else if (forwardQuadrant == 4)
+			gs()->makeBullet(position.x, position.y, bulletTrajectoryX, -bulletTrajectoryY, 2.f);
+	}
+}
+
+void Player::setPlayerWorld(bool inValue)
+{
+	if (inValue)
+		light = true;
+	else
+		light = false;
+}
+
+bool Player::checkPlayerWorld()
+{
+	if (light)
+		return true;
+	else
+		return false;
+}
+
+
+
+

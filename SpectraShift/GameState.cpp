@@ -18,18 +18,18 @@ void GameState::makeBullet(float x, float y, float dx, float dy, float lifespan)
 	bullets.push_back(Projectile(x, y, dx, dy, lifespan));
 }
 
-void GameState::makeAsteroids(float x, float y, float dx, float dy, float lifespan)
+void GameState::makeAsteroid()
 {
 	for (int i = 0; i < asteroids.size(); ++i)
 	{
 		if (!asteroids[i].isAlive) // Find an empty spot in our vector
 		{
-			asteroids[i] = Asteroid(x, y, dx, dy, lifespan);
+			asteroids[i] = Asteroid();
 			return;
 		}
 	}
 	// if there is no empty spot, generate a new bullet into the vector
-	asteroids.push_back(Asteroid(x, y, dx, dy, lifespan));
+	asteroids.push_back(Asteroid());
 }
 
 void GameState::makeExplosion()
@@ -76,18 +76,15 @@ void GameState::update()
 	// Asteroid spawn control
 	int nAsteroidsActive = 0;
 	
-	if (nAsteroidsActive == 0)
+	for (int i = 0; i < asteroids.size(); ++i)
 	{
-		for (int i = 0; i < asteroids.size(); ++i)
+		if (asteroids[i].isAlive)
 		{
-			if (asteroids[i].isAlive)
-			{
-				asteroids[i].update();
-				if (player.isAlive)
-					doCollision(player, asteroids[i]);
-			}
-			else nAsteroidsActive++;
+			asteroids[i].update();
+			if (player.isAlive)
+				doCollision(player, asteroids[i]);
 		}
+		else nAsteroidsActive++;
 	}
 
 	// Collision detection between two objects of the same type
@@ -97,7 +94,7 @@ void GameState::update()
 			doCollision(bullets[i], bullets[j]);
 		}
 }
-	// DRaw everything now!
+
 void GameState::draw()
 {
 	if (player.isAlive)
@@ -115,8 +112,13 @@ void GameState::draw()
 	for (int i = 0; i < asteroids.size(); ++i)
 	{
 		if (asteroids[i].isAlive)
-			asteroids[i].draw();
-	}
+		{
+			if (player.light)
+				asteroids[i].draw(true);
+			else
+				asteroids[i].draw(false);
+		}
+		}
 }
 
 // Needs some way to 'spawn/destroy' bullets/enemies.

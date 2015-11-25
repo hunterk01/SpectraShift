@@ -8,7 +8,6 @@ extern vec2 darkSkyPos = { 450,450 };
 extern vec2 starfieldPos = { 450,450 };
 
 bool currentState, lastState;
-
 bool inLightWorld = true;  // remove after replacing with player.light
 
 void DrawBackground()
@@ -23,6 +22,7 @@ void DrawBackground()
 		if (currentState && !lastState)
 		{
 			inLightWorld = true;
+			
 		}
 	}
 	else
@@ -33,6 +33,8 @@ void DrawBackground()
 		if (currentState && !lastState)
 		{
 			inLightWorld = false;
+			
+
 		}
 	}
 
