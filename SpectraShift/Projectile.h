@@ -5,6 +5,7 @@
 class Projectile : public GameObject
 {
 	float lifetime;
+	int hitTimer = 3;
 
 public:
 	Projectile(float a_x, float a_y, float dx, float dy, float lifespan);

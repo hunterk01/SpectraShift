@@ -8,6 +8,27 @@
 #include <iostream>
 
 float asteroidDelay = .5f;
+bool playerLight = true, compassPointControls = true;
+float lightEnergy = 100, darkEnergy = 100, healthTracker = 1000;
+float energyGainDelay = .025f, energyGainTimer = 0, energyGainPoint = 3.f;
+
+Player::Player()
+{
+	textureName = "playerShip";
+	animationName = "flying";
+	isAlive = true;
+	light = playerLight;
+	rateOfFire = .3f;
+	fireDelay = rateOfFire;
+	compassPointControls = true;
+	position.x = 450;
+	position.y = 450;
+	dimensions.x = 50;
+	dimensions.y = 45;
+	radius = fmax(dimensions.x / 2, dimensions.y / 2) - 5;
+
+	animTimer = 1.5f;
+}
 
 // Make player ship always point toward mouse position
 void Player::SetPlayerAngles()
@@ -39,8 +60,6 @@ void Player::Movement()
 	float deltaTime = sfw::getDeltaTime();
 	float adjTargetAngle = 0.f, adjPerpAngle = 0.f;
 
-	compassPointControls = checkControlType();
-
 	// Adjust target angle for angles greater than 90 degrees
 	if (targetAngle > 90)
 		adjTargetAngle = 180 - targetAngle;
@@ -60,156 +79,158 @@ void Player::Movement()
 	// ****************  Adjusted angle output to console for debugging **************
 	//std::cout << "adj Target: " << adjTargetAngle << "  adj Perp: " << adjPerpAngle << std::endl << std::endl;
 
-	// Movement is always in up, down, left, right directions
-	if (compassPointControls)
+	if (textureName != "explosion")
 	{
-		determineQuadrant();
-		
-		if (sfw::getKey(87) || sfw::getKey(83) || sfw::getKey(65) || sfw::getKey(68))
+		// Movement is always in up, down, left, right directions
+		if (compassPointControls)
 		{
-			if (sfw::getKey(87)) // W
+			determineQuadrant();
+			if (sfw::getKey(87) || sfw::getKey(83) || sfw::getKey(65) || sfw::getKey(68))
 			{
-				if (position.y < 850)
+				if (sfw::getKey(87)) // W
 				{
-					position.y = position.y + speed * deltaTime;
-					lightSkyPos.y = lightSkyPos.y - (speed / 2.5) * deltaTime;
-					darkSkyPos.y = darkSkyPos.y - (speed / 2.5) * deltaTime;
-					starfieldPos.y = starfieldPos.y - (speed / 3) * deltaTime;
+					if (position.y < 850)
+					{
+						position.y = position.y + speed * deltaTime;
+						lightSkyPos.y = lightSkyPos.y - (speed / 2.5) * deltaTime;
+						darkSkyPos.y = darkSkyPos.y - (speed / 2.5) * deltaTime;
+						starfieldPos.y = starfieldPos.y - (speed / 3) * deltaTime;
+					}
+					else
+					{
+						position.y = 850;
+					}
 				}
-				else
+				if (sfw::getKey(65)) // A
 				{
-					position.y = 850;
+					if (position.x > 50)
+					{
+						position.x = position.x - speed * deltaTime;
+						lightSkyPos.x = lightSkyPos.x + (speed / 2.5) * deltaTime;
+						darkSkyPos.x = darkSkyPos.x + (speed / 2.5) * deltaTime;
+						starfieldPos.x = starfieldPos.x + (speed / 3) * deltaTime;
+					}
+					else
+					{
+						position.x = 50;
+					}
+				}
+				if (sfw::getKey(83)) // S
+				{
+					if (position.y > 50)
+					{
+						position.y = position.y - speed * deltaTime;
+						lightSkyPos.y = lightSkyPos.y + (speed / 2.5) * deltaTime;
+						darkSkyPos.y = darkSkyPos.y + (speed / 2.5) * deltaTime;
+						starfieldPos.y = starfieldPos.y + (speed / 3) * deltaTime;
+					}
+					else
+					{
+						position.y = 50;
+					}
+				}
+				if (sfw::getKey(68)) // D
+				{
+					if (position.x < 850)
+					{
+						position.x = position.x + speed * deltaTime;
+						lightSkyPos.x = lightSkyPos.x - (speed / 2.5) * deltaTime;
+						darkSkyPos.x = darkSkyPos.x - (speed / 2.5) * deltaTime;
+						starfieldPos.x = starfieldPos.x - (speed / 3) * deltaTime;
+					}
+					else
+					{
+						position.x = 850;
+					}
 				}
 			}
-			if (sfw::getKey(65)) // A
+			else
 			{
-				if (position.x > 50)
-				{
-					position.x = position.x - speed * deltaTime;
-					lightSkyPos.x = lightSkyPos.x + (speed / 2.5) * deltaTime;
-					darkSkyPos.x = darkSkyPos.x + (speed / 2.5) * deltaTime;
-					starfieldPos.x = starfieldPos.x + (speed / 3) * deltaTime;
-				}
-				else
-				{
-					position.x = 50;
-				}
-			}
-			if (sfw::getKey(83)) // S
-			{
-				if (position.y > 50)
-				{
-					position.y = position.y - speed * deltaTime;
-					lightSkyPos.y = lightSkyPos.y + (speed / 2.5) * deltaTime;
-					darkSkyPos.y = darkSkyPos.y + (speed / 2.5) * deltaTime;
-					starfieldPos.y = starfieldPos.y + (speed / 3) * deltaTime;
-				}
-				else
-				{
-					position.y = 50;
-				}
-			}
-			if (sfw::getKey(68)) // D
-			{
-				if (position.x < 850)
-				{
-					position.x = position.x + speed * deltaTime;
-					lightSkyPos.x = lightSkyPos.x - (speed / 2.5) * deltaTime;
-					darkSkyPos.x = darkSkyPos.x - (speed / 2.5) * deltaTime;
-					starfieldPos.x = starfieldPos.x - (speed / 3) * deltaTime;
-				}
-				else
-				{
-					position.x = 850;
-				}
+				trajectory.x = 0;
+				trajectory.y = 0;
 			}
 		}
+
+		// Movement is relative to the direction the player ship is facing
 		else
 		{
-			trajectory.x = 0;
-			trajectory.y = 0;
-		}
-	}
+			float speedMod = 20;
+			determineQuadrant();
 
-	// Movement is relative to the direction the player ship is facing
-	else
-	{
-		float speedMod = 20;
-		determineQuadrant();
-		
-		if (sfw::getKey(87) || sfw::getKey(83) || sfw::getKey(65) || sfw::getKey(68))
-		{
-			if (sfw::getKey(87)) // W
+			if (sfw::getKey(87) || sfw::getKey(83) || sfw::getKey(65) || sfw::getKey(68))
 			{
-				if (position.y < 850)
+				if (sfw::getKey(87)) // W
 				{
-					float targetDistance = sqrtf((position.x - sfw::getMouseX()) * (position.x - sfw::getMouseX())
-						+ (position.y - sfw::getMouseY()) * (position.y - sfw::getMouseY()));
+					if (position.y < 850)
+					{
+						float targetDistance = sqrtf((position.x - sfw::getMouseX()) * (position.x - sfw::getMouseX())
+							+ (position.y - sfw::getMouseY()) * (position.y - sfw::getMouseY()));
 
-					if (targetDistance > 75)
+						if (targetDistance > 75)
+						{
+							trajectory.x = abs(cos((adjTargetAngle * PI) / 180));
+							trajectory.y = abs(sin((adjTargetAngle * PI) / 180));
+
+							applyVelocity(forwardQuadrant);
+						}
+					}
+					else
+					{
+						position.y = 850;
+					}
+				}
+				if (sfw::getKey(65)) // A
+				{
+					if (position.x > 50)
+					{
+						trajectory.x = abs(cos((adjPerpAngle * PI) / 180));
+						trajectory.y = abs(sin((adjPerpAngle * PI) / 180));
+
+						applyVelocity(leftQuadrant);
+					}
+					else
+					{
+						position.x = 50;
+					}
+				}
+				if (sfw::getKey(83)) // S
+				{
+					if (position.y > 50)
 					{
 						trajectory.x = abs(cos((adjTargetAngle * PI) / 180));
 						trajectory.y = abs(sin((adjTargetAngle * PI) / 180));
 
-						applyVelocity(forwardQuadrant);
+						applyVelocity(reverseQuadrant);
+					}
+					else
+					{
+						position.y = 50;
 					}
 				}
-				else
+				if (sfw::getKey(68)) // D
 				{
-					position.y = 850;
-				}
-			}
-			if (sfw::getKey(65)) // A
-			{
-				if (position.x > 50)
-				{
-					trajectory.x = abs(cos((adjPerpAngle * PI) / 180));
-					trajectory.y = abs(sin((adjPerpAngle * PI) / 180));
-					
-					applyVelocity(leftQuadrant);
-				}
-				else
-				{
-					position.x = 50;
-				}
-			}
-			if (sfw::getKey(83)) // S
-			{
-				if (position.y > 50)
-				{
-					trajectory.x = abs(cos((adjTargetAngle * PI) / 180));
-					trajectory.y = abs(sin((adjTargetAngle * PI) / 180));
+					if (position.x < 850)
+					{
+						trajectory.x = abs(cos((adjPerpAngle * PI) / 180));
+						trajectory.y = abs(sin((adjPerpAngle * PI) / 180));
 
-					applyVelocity(reverseQuadrant);
-				}
-				else
-				{
-					position.y = 50;
+						applyVelocity(rightQuadrant);
+					}
+					else
+					{
+						position.x = 850;
+					}
 				}
 			}
-			if (sfw::getKey(68)) // D
+			else
 			{
-				if (position.x < 850)
-				{
-					trajectory.x = abs(cos((adjPerpAngle * PI) / 180));
-					trajectory.y = abs(sin((adjPerpAngle * PI) / 180));
-
-					applyVelocity(rightQuadrant);
-				}
-				else
-				{
-					position.x = 850;
-				}
+				trajectory.x = 0;
+				trajectory.y = 0;
 			}
 		}
-		else
-		{
-			trajectory.x = 0;
-			trajectory.y = 0;
-		}
+
+		fireWeapon(adjTargetAngle);
 	}
-	
-	fireWeapon(adjTargetAngle);
 
 	// ************  Trajectory output to console for debugging **************
 	//std::cout << "Trajectory = { " << trajectory.x << ", " << trajectory.y << " }" << std::endl;
@@ -221,6 +242,9 @@ void Player::Movement()
 		gs()->makeAsteroid();
 		asteroidDelay = .5f;
 	}
+
+	animTimer += sfw::getDeltaTime();
+	currentFrame = sampleAnimation(textureName, animationName, animTimer);
 }
 
 void Player::determineQuadrant()
@@ -374,43 +398,77 @@ void Player::applyVelocity(int inQuadrant)
 
 void Player::fireWeapon(float inAdjTargetAngle)
 {
-	float bulletTrajectoryX, bulletTrajectoryY;
+	float bulletTrajectoryX, bulletTrajectoryY, energyPerShot = 4;
 	
 	fireDelay -= sfw::getDeltaTime();
 
 	if (sfw::getMouseButton(MOUSE_BUTTON_LEFT) && fireDelay < 0)
 	{
-		float mouseX, mouseY;
-		fireDelay = rateOfFire;
+		if ((playerLight && darkEnergy >= energyPerShot) || (!playerLight && lightEnergy >= energyPerShot))
+		{
+			float mouseX, mouseY;
+			fireDelay = rateOfFire;
 
-		bulletTrajectoryX = abs(cos((inAdjTargetAngle * PI) / 180));
-		bulletTrajectoryY = abs(sin((inAdjTargetAngle * PI) / 180));
+			if (playerLight)
+				darkEnergy -= energyPerShot;
+			else
+				lightEnergy -= energyPerShot;
 
-		if (forwardQuadrant == 1)
-			gs()->makeBullet(position.x, position.y, bulletTrajectoryX, bulletTrajectoryY, 2.f);
-		else if (forwardQuadrant == 2)
-			gs()->makeBullet(position.x, position.y, -bulletTrajectoryX, bulletTrajectoryY, 2.f);
-		else if (forwardQuadrant == 3)
-			gs()->makeBullet(position.x, position.y, -bulletTrajectoryX, -bulletTrajectoryY, 2.f);
-		else if (forwardQuadrant == 4)
-			gs()->makeBullet(position.x, position.y, bulletTrajectoryX, -bulletTrajectoryY, 2.f);
+			bulletTrajectoryX = abs(cos((inAdjTargetAngle * PI) / 180));
+			bulletTrajectoryY = abs(sin((inAdjTargetAngle * PI) / 180));
+
+			if (forwardQuadrant == 1)
+				gs()->makeBullet(position.x, position.y, bulletTrajectoryX, bulletTrajectoryY, 2.f);
+			else if (forwardQuadrant == 2)
+				gs()->makeBullet(position.x, position.y, -bulletTrajectoryX, bulletTrajectoryY, 2.f);
+			else if (forwardQuadrant == 3)
+				gs()->makeBullet(position.x, position.y, -bulletTrajectoryX, -bulletTrajectoryY, 2.f);
+			else if (forwardQuadrant == 4)
+				gs()->makeBullet(position.x, position.y, bulletTrajectoryX, -bulletTrajectoryY, 2.f);
+		}
 	}
 }
 
-void Player::setPlayerWorld(bool inValue)
+void Player::energyGain()
 {
-	if (inValue)
-		light = true;
-	else
-		light = false;
+	if (energyGainTimer >= energyGainPoint)
+	{
+		if (playerLight)
+		{
+			lightEnergy += 5;
+			energyGainTimer = 0;
+		}
+		else
+		{
+			darkEnergy += 5;
+			energyGainTimer = 0;
+		}
+	}
+	energyGainTimer += energyGainDelay;
 }
 
-bool Player::checkPlayerWorld()
+void Player::onCollision(GameObject & go, float distance)
 {
-	if (light)
-		return true;
-	else
-		return false;
+	if (go.textureName == "asteroid1" || go.textureName == "asteroid2" || go.textureName == "asteroid3" || go.textureName == "asteroid4")
+	{
+		healthTracker -= 200;
+		if (healthTracker <= 0)
+		{
+			trajectory.x = 0;
+			trajectory.y = 0;
+			dimensions.x = 70;
+			dimensions.y = 70;
+			currentFrame = 0;
+			animTimer = 1.5f;
+			textureName = "explosion";
+			animationName = "bigBoom";
+		}
+	}
+}
+
+void Player::draw()
+{
+	sfw::drawTexture(GetTexture(textureName), position.x, position.y, dimensions.x, dimensions.y, targetAngle, true, currentFrame);
 }
 
 

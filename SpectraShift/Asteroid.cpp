@@ -1,17 +1,22 @@
 #include "GameObjects.h"
 #include "GameState.h"
 #include "Asteroid.h"
+#include "Player.h"
+#include "HUD.h"
 #include <time.h>
+#include <iostream>
 
 int lightShift = 0;
 
 Asteroid::Asteroid()
 {
 	int asteroidType = rand() % 4;
-		
-	speed = 125;
+	
+	health = 50;
+	speed = 120;
 	dimensions.x = 70;
 	dimensions.y = 70;
+	radius = fmax(dimensions.x / 2, dimensions.y / 2) - 10;
 
 	switch (asteroidType)
 	{
@@ -30,7 +35,39 @@ Asteroid::Asteroid()
 
 void Asteroid::onCollision(GameObject & go, float distance)
 {
+	if (go.textureName == "lightShot" || go.textureName == "darkShot")
+	{
+		health -= 25;
+		if (health <= 0)
+		{
+			if (light)
+				lightEnergy += 10;
+			else
+				darkEnergy += 10;
 
+			CalculateScore(75);
+
+			trajectory.x = 0;
+			trajectory.y = 0;
+			dimensions.x = 80;
+			dimensions.y = 80;
+			animTimer = 1.5f;
+			currentFrame = 0;
+			textureName = "explosion";
+			animationName = "bigBoom";
+		}
+	}
+	else if (go.textureName == "playerShip" || go.textureName == "explosion")
+	{
+		trajectory.x = 0;
+		trajectory.y = 0;
+		dimensions.x = 80;
+		dimensions.y = 80;
+		animTimer = 1.5f;
+		currentFrame = 0;
+		textureName = "explosion";
+		animationName = "bigBoom";
+	}
 }
 
 void Asteroid::update()
@@ -44,28 +81,28 @@ void Asteroid::update()
 	position.y += trajectory.y * speed * sfw::getDeltaTime();
 }
 
-void Asteroid::draw(bool inLight)
+void Asteroid::draw()
 {
-	if (inLight)
+	if (playerLight)
 	{
 		if (light)
 		{
-			sfw::drawTexture(GetTexture(textureName), position.x, position.y, dimensions.x, dimensions.y, targetAngle, true, currentFrame, 0xffffffff);
+			sfw::drawTexture(GetTexture(textureName), position.x, position.y, dimensions.x, dimensions.y, targetAngle, true, currentFrame, 0xffffccff);
 		}
 		else
 		{
-			sfw::drawTexture(GetTexture(textureName), position.x, position.y, dimensions.x, dimensions.y, targetAngle, true, currentFrame, 0xffffff30);
+			sfw::drawTexture(GetTexture(textureName), position.x, position.y, dimensions.x, dimensions.y, targetAngle, true, currentFrame, 0x66ccff30);
 		}
 	}
 	else
 	{
 		if (light)
 		{
-			sfw::drawTexture(GetTexture(textureName), position.x, position.y, dimensions.x, dimensions.y, targetAngle, true, currentFrame, 0xffffff30);
+			sfw::drawTexture(GetTexture(textureName), position.x, position.y, dimensions.x, dimensions.y, targetAngle, true, currentFrame, 0xffffcc40);
 		}
 		else
 		{
-			sfw::drawTexture(GetTexture(textureName), position.x, position.y, dimensions.x, dimensions.y, targetAngle, true, currentFrame, 0xffffffff);
+			sfw::drawTexture(GetTexture(textureName), position.x, position.y, dimensions.x, dimensions.y, targetAngle, true, currentFrame, 0x66ccffff);
 		}
 	}
 }

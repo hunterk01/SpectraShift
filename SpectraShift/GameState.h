@@ -7,28 +7,20 @@
 
 class GameState
 {
-	Player player; 	// store all of our gameobjects
+	Player player;
 	Asteroid asteroid;
 	std::vector<Projectile> bullets;
 	std::vector<Asteroid> asteroids;
-
 	
 public:
-	// Parameters may match the constructor for the bullet
-	void makeBullet(float x, float y, float dx, float dy, float lifespan);
-	void makeAsteroid();
-
-	void makeExplosion();
-	void makeEnemy();
+	bool resetGame = false;
+	float buttonDelay = 1.f;
 
 	GameState();
 
+	void makeBullet(float x, float y, float dx, float dy, float lifespan);
+	void makeAsteroid();
 	void update();
-
 	void draw();
-
-	// Needs some way to 'spawn/destroy' bullets/enemies.
-
-	// Changes in gameplay happen here.
 };
 

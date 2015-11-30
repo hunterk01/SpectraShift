@@ -7,21 +7,16 @@
 class GameState;
 class MenuState;
 
+extern bool playerLight, compassPointControls;
+extern float lightEnergy, darkEnergy, healthTracker;
+
 class Player : public GameObject
 {
 public:
-	vec2 position = { 450, 450 };
 	float speed = 250, fireDelay, rateOfFire;
 	int forwardQuadrant, reverseQuadrant, rightQuadrant, leftQuadrant;
-	bool compassPointControls;
 
-	Player()
-	{
-		isAlive = true;
-		light = true;
-		rateOfFire = .3f;
-		compassPointControls = false;
-	}
+	Player();
 
 	void SetPlayerAngles();
 	
@@ -33,8 +28,10 @@ public:
 
 	void fireWeapon(float inAdjTargetAngle);
 
-	void setPlayerWorld(bool inValue);
+	void energyGain();
 
-	bool checkPlayerWorld();
+	virtual void onCollision(GameObject &go, float distance);
+
+	virtual void draw();
 };
 

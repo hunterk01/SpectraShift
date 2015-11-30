@@ -5,19 +5,25 @@
 #include "Menu.h"
 #include "Player.h"
 
-vec2 TitleStarsPosA = { 0, 950 };
-vec2 TitleNeb1PosA = { 0, 950 };
-vec2 TitleNeb2PosA = { 0, 950 };
-vec2 TitleStarsPosB = { 1200, 950 };
-vec2 TitleNeb1PosB = { 3004, 950 };
-vec2 TitleNeb2PosB = { 2666, 950 };
-vec2 TitlePosition = { 450,450 };
+MenuState::MenuState()
+{
+	TitleStarsPosA = { 0, 950 };
+	TitleNeb1PosA = { 0, 950 };
+	TitleNeb2PosA = { 0, 950 };
+	TitleStarsPosB = { 1200, 950 };
+	TitleNeb1PosB = { 3004, 950 };
+	TitleNeb2PosB = { 2666, 950 };
+	TitlePosition = { 450,450 };
 
-bool moveTitle = false, showMenu = true, drawCredits = false, drawQuit = false, drawStart = false, drawControls = false, 
-		drawInstructions = false, menuOpen = false, instructionsOpen = false, controlsOpen = false, quitOpen = false,
-		creditsOpen = false, forwardControl = true, exitGame = false, gameOn = false;;
+	moveTitle = false, showMenu = true, drawCredits = false, drawQuit = false, drawStart = false, drawControls = false,
+	drawInstructions = false, menuOpen = false, instructionsOpen = false, controlsOpen = false, quitOpen = false,
+	creditsOpen = false, exitGame = false, gameOn = false;;
 
-void DrawTitleScreen()
+	buttonDelay = 1.f;
+}
+
+
+void MenuState::Draw()
 {
 	float deltaTime = sfw::getDeltaTime();
 
@@ -67,7 +73,7 @@ void DrawTitleScreen()
 	}
 }
 
-void DrawMenu()
+void MenuState::DrawMenu()
 {
 	float mouseX = 0, mouseY = 0;
 	
@@ -126,7 +132,7 @@ void DrawMenu()
 	}
 }
 
-void DrawInstructions()
+void MenuState::DrawInstructions()
 {
 	float mouseX = 0, mouseY = 0;
 	
@@ -146,7 +152,7 @@ void DrawInstructions()
 	}
 }
 
-void DrawControls()
+void MenuState::DrawControls()
 {
 	float mouseX = 0, mouseY = 0;
 	
@@ -168,7 +174,7 @@ void DrawControls()
 	sfw::drawLine(190, 280, 190, 320);
 
 	// Draw X
-	if (forwardControl)
+	if (!compassPointControls)
 	{
 		sfw::drawTexture(GetTexture("Xmark"), 170, 500, 35, 35, 0, true, 0);
 	}
@@ -185,11 +191,11 @@ void DrawControls()
 
 	if (190 > mouseX && mouseX > 150 && 520 > mouseY && mouseY > 480)
 	{
-		forwardControl = true;
+		compassPointControls = false;
 	}
 	else if (190 > mouseX && mouseX > 150 && 320 > mouseY && mouseY > 280)
 	{
-		forwardControl = false;
+		compassPointControls = true;
 	}
 	else if (755.5 > mouseX && mouseX > 644.5 && 145 > mouseY && mouseY > 105)
 	{
@@ -198,7 +204,7 @@ void DrawControls()
 	}
 }
 
-void DrawCredits()
+void MenuState::DrawCredits()
 {
 	float mouseX = 0, mouseY = 0;
 	
@@ -218,38 +224,17 @@ void DrawCredits()
 	}
 }
 
-void QuitGame()
+void MenuState::QuitGame()
 {
+	deltaTime = sfw::getDeltaTime();
+
 	sfw::drawTexture(GetTexture("thanks"), 450, 450, 800, 59, 0, true, 0);
-	
-	if (sfw::getMouseButton(MOUSE_BUTTON_LEFT))
+
+	if (sfw::getMouseButton(MOUSE_BUTTON_LEFT) && buttonDelay < 0)
 	{
 		exitGame = true;
 		gameOn = false;
 	}
-
-}
-
-bool CheckExitStatus()
-{
-	if (exitGame == true)
-		return true;
-	else
-		return false;
-}
-
-bool CheckGameStatus()
-{
-	if (gameOn == true)
-		return true;
-	else
-		return false;
-}
-
-bool checkControlType()
-{
-	if (forwardControl)
-		return false;
-	else
-		return true;
+	
+	buttonDelay -= deltaTime;
 }

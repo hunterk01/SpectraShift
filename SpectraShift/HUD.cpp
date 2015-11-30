@@ -1,31 +1,30 @@
 #include "sfwdraw.h"
 #include "HUD.h"
 #include "AssetLibrary.h"
+#include "Player.h"
 #include <map>
+#include <fstream>
 
 int scoreValues[7] = { 0,0,0,0,0,0 };
-float health = 1000, light = 100, dark = 100;
 float healthPosY, lightPosY, darkPosY;
 bool hudTexturesLoaded = false;
 
-void DrawMeters(float inHealth, float inLight, float inDark)
+void DrawMeters(float inHealth)
 {
-	health += inHealth;
-	light += inLight;
-	dark += inDark;
+	healthTracker += inHealth;
 
 	// Set upper and lower bounds
-	if (health < 0)		health = 0;
-	if (health > 1000)	health = 1000;
-	if (light < 0)		light = 0;
-	if (light > 100)	light = 100;
-	if (dark < 0)		dark = 0;
-	if (dark > 100)		dark = 100;
+	if (healthTracker < 0)		healthTracker = 0;
+	if (healthTracker > 1000)	healthTracker = 1000;
+	if (lightEnergy < 0)		lightEnergy = 0;
+	if (lightEnergy > 100)		lightEnergy = 100;
+	if (darkEnergy < 0)			darkEnergy = 0;
+	if (darkEnergy > 100)		darkEnergy = 100;
 
 	// Set value meter pointer positions
-	healthPosY = (health * 0.090) + 10;
-	lightPosY = (light * 0.9) + 10;
-	darkPosY = (dark * 0.9) + 10;
+	healthPosY = (healthTracker * 0.090) + 10;
+	lightPosY = (lightEnergy * 0.9) + 10;
+	darkPosY = (darkEnergy * 0.9) + 10;
 
 	sfw::drawTexture(GetTexture("valueMeter"), 820, 55, 15, 95, 0, true, 0, 0xff0000cc);
 	sfw::drawTexture(GetTexture("valueMeter"), 845, 55, 15, 95, 0, true, 0, 0xffff00cc);

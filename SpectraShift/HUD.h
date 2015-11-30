@@ -1,6 +1,6 @@
 #pragma once
 
-void DrawMeters(float inHealth, float inLight, float inDark);
+void DrawMeters(float inHealth);
 
 void DrawHUD();
 

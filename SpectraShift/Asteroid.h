@@ -13,7 +13,7 @@ public:
 
 	virtual void update();
 
-	virtual void draw(bool inLight);
+	virtual void draw();
 
 	void AsteroidSpawn();
 };

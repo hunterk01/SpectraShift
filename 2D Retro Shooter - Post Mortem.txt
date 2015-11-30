@@ -1,0 +1,62 @@
+
+AIE Assessment #3
+2D Retro Shooter - Post Mortem
+Kevin Hunter
+
+
+Scope
+-----
+Learning from my ambitious game ideas for the first two assessments, I broke this project down into multiple
+phases.  That way I could work on smaller milestones, rather than the grand vision.
+
+Phase 1 - Get the player ship moving and the background doing parallax scrolling in response to the ship 
+movement.  This involved two control schemes, one with simple "up, down, left, right" controls, and the
+other moving in relation to the direction the ship was facing.  This phase also included player weapon
+fire.
+
+Phase 2 - Setup the players ability to shift back and forth between the light and dark worlds.  This also
+included phasing light and dark world props back and forth as the player shifts.
+
+Phase 3 - Spawn animated asteroids and setup collisions with player ship and bullets.
+
+Phase 4 - Spawn enemy ships that responded to the player position and fired bullets at the player.
+
+Phase 5 - Create a boss that exists in both the light and dark world.  The player would have to shift
+back and forth between worlds in order to beat the boss.
+
+Challenges
+----------
+The forward relative controls proved to be more challanging, due to all of the math involved.  This was 
+necessary as the building block for other mechanics, such as player weapon fire, enemy ship movement, and 
+enemy weapon fire.  In the end, I didn't have time to build the enemy ships, but it made for a pretty cool
+control scheme for the player.
+
+Another challenge was dealing with all of the game objects between the light and dark worlds.  Everything
+needed two checks for what to draw, collisions, and how the objects were created.  It was a lot to keep 
+track of, but it made for an interesting game mechanic.
+
+
+What went right
+---------------
+The biggest accomplishment of this game is the light and dark world shift.  It caused a lot of extra work
+keeping track of all of the necessary checks, but once I got the first few challenges figured out, it
+became easy to replicate in other instances.  The effect that it creates, really takes the game from a 
+boring asteroid type shooter, to something far more interesting.
+
+
+What went wrong
+---------------
+Since so many things relied on if the player was in the light or dark world, that variable became a piece
+of information that was required throughout almost all parts of the program.  There was a point in the 
+process where I couldn't figure out how to get it to be visible to all the necessary source files.  That
+caused a big delay in getting some of the drawing and collision logic in place.
+
+
+Conclusion
+----------
+I learned a lot from this assessment, by creating such a dynamic game idea, and challenging myself to 
+figure out how to get it built.  I didn't have time to impliment phases 4 and 5, but plan to work on that
+in my own time.  I'm especially interested in getting the boss fight built.  All of the tools are now in
+place, so it will just take time to build the rest of the game.
+
+

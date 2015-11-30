@@ -1,19 +1,21 @@
 #pragma once
 
-void DrawTitleScreen();
+class MenuState
+{
+public:
+	vec2 TitleStarsPosA, TitleNeb1PosA, TitleNeb2PosA, TitleStarsPosB, TitleNeb1PosB, TitleNeb2PosB, TitlePosition;
 
-void DrawMenu();
+	bool moveTitle, showMenu, drawCredits, drawQuit, drawStart, drawControls, drawInstructions, menuOpen,
+		instructionsOpen, controlsOpen, quitOpen, creditsOpen, exitGame, gameOn;
 
-void DrawInstructions();
+	float buttonDelay, deltaTime;
 
-void DrawControls();
+	MenuState();
 
-void DrawCredits();
-
-void QuitGame();
-
-bool CheckExitStatus();
-
-bool CheckGameStatus();
-
-bool checkControlType();
+	void Draw();
+	void DrawMenu();
+	void DrawInstructions();
+	void DrawControls();
+	void DrawCredits();
+	void QuitGame();
+};

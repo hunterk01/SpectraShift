@@ -1,33 +1,52 @@
 #include "GameObjects.h"
 #include "GameState.h"
 #include "Projectile.h"
-
+#include "Player.h"
 
 Projectile::Projectile(float a_x, float a_y, float dx, float dy, float lifespan)
 {
-	
-	
-	textureName = "darkShot";
+	if (playerLight)
+	{
+		textureName = "darkShot";
+		light = true;
+	}
+	else
+	{
+		textureName = "lightShot";
+		light = false;
+	}
+
+	isAlive = true;
 	animationName = "pulse";
 	animTimer = .25f;
-	
 	speed = 500;
-	
-	position.x = a_x;
-	position.y = a_y;
-
-	trajectory.x = dx;
-	trajectory.y = dy;
-
 	dimensions.x = 25;
 	dimensions.y = 25;
-
+	radius = fmax(dimensions.x / 2, dimensions.y / 2) - 7;
+	position.x = a_x;
+	position.y = a_y;
+	trajectory.x = dx;
+	trajectory.y = dy;
 	lifetime = lifespan;
 }
 
 void Projectile::onCollision(GameObject & go, float distance)
 {
-	// we could react to collisions here
+	if (light)
+	{
+		textureName = "darkBulletHit";
+	}
+	else
+	{
+		textureName = "lightBulletHit";
+	}
+	
+	animationName = "smallBoom";
+	trajectory.x = 0;
+	trajectory.y = 0;
+	dimensions.x = 30;
+	dimensions.y = 30;
+	animTimer = .25f;
 }
 
 void Projectile::update()
@@ -43,5 +62,26 @@ void Projectile::update()
 
 void Projectile::draw()
 {
-	sfw::drawTexture(GetTexture("bullet"), position.x, position.y, dimensions.x, dimensions.y, 0, true, currentFrame);
+	if (playerLight)
+	{
+		if (light)
+		{
+			sfw::drawTexture(GetTexture(textureName), position.x, position.y, dimensions.x, dimensions.y, 0, true, currentFrame, 0xffffffff);
+		}
+		else
+		{
+			sfw::drawTexture(GetTexture(textureName), position.x, position.y, dimensions.x, dimensions.y, 0, true, currentFrame, 0xffffff30);
+		}
+		}
+	else
+	{
+		if (!light)
+		{
+			sfw::drawTexture(GetTexture(textureName), position.x, position.y, dimensions.x, dimensions.y, 0, true, currentFrame, 0xffffffff);
+		}
+		else
+		{
+			sfw::drawTexture(GetTexture(textureName), position.x, position.y, dimensions.x, dimensions.y, 0, true, currentFrame, 0xffffff40);
+		}
+	}
 }

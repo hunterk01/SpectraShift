@@ -19,7 +19,7 @@ public:
 
 	std::string textureName, animationName;
 	vec2 position, trajectory, dimensions;
-	float targetAngle, perpAngle, speed, radius = fmax(dimensions.x, dimensions.y);
+	float targetAngle, perpAngle, speed, radius;
 	int health;
 	bool light, isAlive;
 	float animTimer;

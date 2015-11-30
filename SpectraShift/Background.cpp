@@ -2,27 +2,26 @@
 #include "AssetLibrary.h"
 #include "GameObjects.h"
 #include "Background.h"
+#include "Player.h"
 
 extern vec2 lightSkyPos = { 450,450 };
 extern vec2 darkSkyPos = { 450,450 };
 extern vec2 starfieldPos = { 450,450 };
 
 bool currentState, lastState;
-bool inLightWorld = true;  // remove after replacing with player.light
 
 void DrawBackground()
 {
 	currentState = sfw::getKey(32);
 	
-	if (!inLightWorld)
+	if (!playerLight)
 	{
 		sfw::drawTexture(GetTexture("BG_stars"), starfieldPos.x, starfieldPos.y, 1800, 1800, 90, true, 0, 0xffffffff);
 		sfw::drawTexture(GetTexture("BG_dark"), darkSkyPos.x, darkSkyPos.y, 1800, 1800, 90, true, 0, 0xffffff60);
 
 		if (currentState && !lastState)
 		{
-			inLightWorld = true;
-			
+			playerLight = true;
 		}
 	}
 	else
@@ -32,9 +31,7 @@ void DrawBackground()
 
 		if (currentState && !lastState)
 		{
-			inLightWorld = false;
-			
-
+			playerLight = false;
 		}
 	}
 
