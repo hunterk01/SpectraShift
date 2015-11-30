@@ -66,27 +66,27 @@ void CalculateScore(int inScore)
 
 	if (scoreValues[5] > 9)
 	{
-		scoreValues[5] = scoreValues[0] % 10;
+		scoreValues[5] = scoreValues[5] % 10;
 		scoreValues[4] += 1;
 	}
 	if (scoreValues[4] > 9)
 	{
-		scoreValues[4] = scoreValues[0] % 10;
+		scoreValues[4] = scoreValues[4] % 10;
 		scoreValues[3] += 1;
 	}
 	if (scoreValues[3] > 9)
 	{
-		scoreValues[3] = scoreValues[0] % 10;
+		scoreValues[3] = scoreValues[3] % 10;
 		scoreValues[2] += 1;
 	}
 	if (scoreValues[2] > 9)
 	{
-		scoreValues[2] = scoreValues[0] % 10;
+		scoreValues[2] = scoreValues[2] % 10;
 		scoreValues[1] += 1;
 	}
 	if (scoreValues[1] > 9)
 	{
-		scoreValues[1] = scoreValues[0] % 10;
+		scoreValues[1] = scoreValues[1] % 10;
 		scoreValues[0] += 1;
 	}
 }
