@@ -19,7 +19,7 @@ MenuState::MenuState()
 	drawInstructions = false, menuOpen = false, instructionsOpen = false, controlsOpen = false, quitOpen = false,
 	creditsOpen = false, exitGame = false, gameOn = false;;
 
-	buttonDelay = 1.f;
+	buttonDelay = .7f;
 }
 
 
@@ -31,18 +31,18 @@ void MenuState::Draw()
 	sfw::drawTexture(GetTexture("BG_stars"), TitleStarsPosB.x, TitleStarsPosB.y, 1200, 1000, 0, false, 0, 0xffffffff);
 	sfw::drawTexture(GetTexture("TitleBG1"), TitleNeb1PosA.x, TitleNeb1PosA.y, 3004, 1000, 0, false, 0, 0xffffff45);
 	sfw::drawTexture(GetTexture("TitleBG1"), TitleNeb1PosB.x, TitleNeb1PosB.y, 3004, 1000, 0, false, 0, 0xffffff45);
-	sfw::drawTexture(GetTexture("TitleBG2"), TitleNeb2PosB.x, TitleNeb1PosB.y, 2666, 1000, 0, false, 0, 0xffff0045);
 	sfw::drawTexture(GetTexture("TitleBG2"), TitleNeb2PosA.x, TitleNeb2PosA.y, 2666, 1000, 0, false, 0, 0xffff0045);
+	sfw::drawTexture(GetTexture("TitleBG2"), TitleNeb2PosB.x, TitleNeb1PosB.y, 2666, 1000, 0, false, 0, 0xffff0045);
 
 	sfw::drawTexture(GetTexture("target"), sfw::getMouseX(), sfw::getMouseY(), 20, 20, 0, true, 0);
 	sfw::drawTexture(GetTexture("title"), TitlePosition.x, TitlePosition.y, 800, 106, 0, true, 0);
 
 	TitleStarsPosA.x -= 25 * deltaTime;
 	TitleStarsPosB.x -= 25 * deltaTime;
-	TitleNeb1PosA.x -= 45 * deltaTime;
-	TitleNeb1PosB.x -= 45 * deltaTime;
-	TitleNeb2PosA.x -= 80 * deltaTime;
-	TitleNeb2PosB.x -= 80 * deltaTime;
+	TitleNeb1PosA.x -= 40 * deltaTime;
+	TitleNeb1PosB.x -= 40 * deltaTime;
+	TitleNeb2PosA.x -= 75 * deltaTime;
+	TitleNeb2PosB.x -= 75 * deltaTime;
 
 	if (TitleStarsPosA.x <= -1200)	TitleStarsPosA.x = 1200;
 	if (TitleStarsPosB.x <= -1200)	TitleStarsPosB.x = 1200;

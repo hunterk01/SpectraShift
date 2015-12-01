@@ -6,7 +6,7 @@
 #include <time.h>
 #include <iostream>
 
-int lightShift = 0;
+int lightShift = 0, asteroidsDestroyed = 0, maxSpawnRate;
 
 Asteroid::Asteroid()
 {
@@ -114,7 +114,7 @@ void Asteroid::AsteroidSpawn()
 	int timerChange = rand() % 5;
 	
 	// Set trajectory
-	float slopeX = (rand() % 175) + 275;
+	float slopeX = (rand() % 125) + 325;
 	slopeX = slopeX / 1000;
 	float slopeY = 1 - slopeX;
 

@@ -22,7 +22,7 @@ Projectile::Projectile(float a_x, float a_y, float dx, float dy, float lifespan)
 	speed = 500;
 	dimensions.x = 25;
 	dimensions.y = 25;
-	radius = fmax(dimensions.x / 2, dimensions.y / 2) - 7;
+	radius = fmax(dimensions.x / 2, dimensions.y / 2) - 5;
 	position.x = a_x;
 	position.y = a_y;
 	trajectory.x = dx;
@@ -44,8 +44,8 @@ void Projectile::onCollision(GameObject & go, float distance)
 	animationName = "smallBoom";
 	trajectory.x = 0;
 	trajectory.y = 0;
-	dimensions.x = 30;
-	dimensions.y = 30;
+	dimensions.x = 45;
+	dimensions.y = 45;
 	animTimer = .25f;
 }
 

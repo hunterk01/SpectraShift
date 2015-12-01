@@ -7,7 +7,7 @@
 #include <math.h>
 #include <iostream>
 
-float asteroidDelay = .5f;
+float asteroidDelay = .5f, asteroidDelayTarget = 0, asteroidDelayMax = .25f;
 bool playerLight = true, compassPointControls = true;
 float lightEnergy = 100, darkEnergy = 100, healthTracker = 1000;
 float energyGainDelay = .025f, energyGainTimer = 0, energyGainPoint = 3.f;
@@ -237,10 +237,12 @@ void Player::Movement()
 
 	asteroidDelay -= deltaTime;
 
-	if (asteroidDelay <= 0)
+	if (asteroidDelay <= asteroidDelayTarget)
 	{
 		gs()->makeAsteroid();
 		asteroidDelay = .5f;
+		if (asteroidDelayTarget < asteroidDelayMax)
+			asteroidDelayTarget += .0005;
 	}
 
 	animTimer += sfw::getDeltaTime();

@@ -14,7 +14,7 @@ class GameState
 	
 public:
 	bool resetGame = false;
-	float buttonDelay = 1.f;
+	float buttonDelay = .7f;
 
 	GameState();
 
