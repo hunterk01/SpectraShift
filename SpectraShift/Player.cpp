@@ -251,6 +251,7 @@ void Player::Movement()
 
 void Player::determineQuadrant()
 {
+	// Calculate which quadrant each player direction is facing when in forward relative controls
 	if (90 >= targetAngle && targetAngle >= 0)
 	{
 		forwardQuadrant = 1;

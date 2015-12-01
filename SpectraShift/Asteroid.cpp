@@ -132,13 +132,13 @@ void Asteroid::AsteroidSpawn()
 		lightShift = 0;
 	}
 
-	
 	// Set random draw rotation
 	if (rotationDirection == 0)
 		targetAngle = rand() % 180;
 	else
 		targetAngle = -(rand() % 180);
 
+	// Set spawn location outside the four screen edges
 	if (axis == 0)
 	{
 		position.x = -50;
