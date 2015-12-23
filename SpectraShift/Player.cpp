@@ -6,6 +6,8 @@
 #include "Menu.h"
 #include <math.h>
 #include <iostream>
+#include <Windows.h>
+#include <mmsystem.h>
 
 float asteroidDelay = .5f, asteroidDelayTarget = 0, asteroidDelayMax = .25f;
 bool playerLight = true, compassPointControls = true;
@@ -428,6 +430,8 @@ void Player::fireWeapon(float inAdjTargetAngle)
 				gs()->makeBullet(position.x, position.y, -bulletTrajectoryX, -bulletTrajectoryY, 2.f);
 			else if (forwardQuadrant == 4)
 				gs()->makeBullet(position.x, position.y, bulletTrajectoryX, -bulletTrajectoryY, 2.f);
+
+			PlaySound(TEXT("./Assets/Audio/weapon_player.wav"), NULL, SND_ASYNC | SND_FILENAME);
 		}
 	}
 }
@@ -465,6 +469,7 @@ void Player::onCollision(GameObject & go, float distance)
 			animTimer = 1.5f;
 			textureName = "explosion";
 			animationName = "bigBoom";
+			PlaySound(TEXT("./Assets/Audio/explosion_player.wav"), NULL, SND_ASYNC | SND_FILENAME);
 		}
 	}
 }

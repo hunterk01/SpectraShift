@@ -8,6 +8,8 @@
 #include "Background.h"
 #include "HUD.h"
 #include <time.h>
+#include <Windows.h>
+#include <mmsystem.h>
 
 void main()
 {

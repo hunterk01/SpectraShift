@@ -5,6 +5,8 @@
 #include "HUD.h"
 #include <time.h>
 #include <iostream>
+#include <Windows.h>
+#include <mmsystem.h>
 
 int lightShift = 0, asteroidsDestroyed = 0, maxSpawnRate;
 
@@ -55,6 +57,7 @@ void Asteroid::onCollision(GameObject & go, float distance)
 			currentFrame = 0;
 			textureName = "explosion";
 			animationName = "bigBoom";
+			PlaySound(TEXT("./Assets/Audio/explosion_asteroid.wav"), NULL, SND_ASYNC | SND_FILENAME);
 		}
 	}
 	else if (go.textureName == "playerShip" || go.textureName == "explosion")
@@ -67,6 +70,7 @@ void Asteroid::onCollision(GameObject & go, float distance)
 		currentFrame = 0;
 		textureName = "explosion";
 		animationName = "bigBoom";
+		PlaySound(TEXT("./Assets/Audio/explosion_asteroid.wav"), NULL, SND_ASYNC | SND_FILENAME);
 	}
 }
 
